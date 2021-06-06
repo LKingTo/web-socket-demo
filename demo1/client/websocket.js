@@ -4,7 +4,7 @@ const exit = document.getElementById("exit")
 const receiveBox = document.getElementById("receive-box")
 
 const ws = new WebSocket('ws://127.0.0.1:3005/websocket/test');
-console.log(ws)
+console.log('client: ', ws)
 
 ws.onopen = e => {
     console.log(`WebSocket 连接状态： ${ws.readyState}`)

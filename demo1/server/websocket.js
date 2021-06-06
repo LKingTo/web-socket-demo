@@ -5,6 +5,7 @@ expressWs(router);
 
 router.ws('/test', (ws, req) => {
     ws.send('连接成功');
+    console.log('server ws', ws)
     let interval;
     interval = setInterval(() => {
         if (ws.readyState === ws.OPEN) {
