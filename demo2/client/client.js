@@ -1,6 +1,10 @@
 (function () {
   const SESSION_KEY = 'realtime_login'
   const SOCKET_URL = 'ws://127.0.0.1:3004'
+  const ROUTES = {
+    CHAT: '/chat',
+    NEWS: '/news'
+  }
 
   // 生成用户id
   function generateUserId () {
@@ -51,7 +55,7 @@
           this.scrollToBottom()
         })
         // 连接websocket后端服务器
-        this.socket = io.connect(SOCKET_URL, { transports: ['websocket', 'xhr-polling', 'jsonp-polling'] })
+        this.socket = io.connect(`${SOCKET_URL}${ROUTES.CHAT}`, { transports: ['websocket', 'xhr-polling', 'jsonp-polling'] })
         // 告诉服务器端有用户登录
         this.socket.emit('login', { userId: this.userId, userName: this.userName })
         // 监听新用户登录

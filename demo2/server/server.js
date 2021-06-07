@@ -14,8 +14,14 @@ app.get('/', (req, res, next) => {
 const onlineUsers = {}
 // 当前在线人数
 let onlineCount = 0
+// 路由分组
+const ROUTES = {
+  CHAT: '/chat',
+  NEWS: '/news'
+}
 
-io.on('connection', (socket) => {
+const chat = io.of(ROUTES.CHAT)  // 指定聊天路由路径
+chat.on('connection', (socket) => {
   console.log('[a user connected]: ')
 
   // 监听用户新加入
@@ -29,7 +35,7 @@ io.on('connection', (socket) => {
       onlineCount++
     }
     // 向所有客户端广播有新用户加入
-    io.emit('login', { onlineUsers: onlineUsers, onlineCount: onlineCount, user: obj })
+    chat.emit('login', { onlineUsers: onlineUsers, onlineCount: onlineCount, user: obj })
     console.log(`${obj.userName}加入了聊天室`)
   })
   // 监听用户退出
@@ -47,8 +53,12 @@ io.on('connection', (socket) => {
   // 监听新消息发布
   socket.on('message', (obj) => {
     // 向所有客户端发布新消息
-    io.emit('message', obj)
+    chat.emit('message', obj)
     console.log(`${obj.userName}说：${obj.content}`)
+  })
+
+  socket.on('disconnect', () => {
+    // io断开连接事件
   })
 })
 
